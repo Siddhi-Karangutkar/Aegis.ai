@@ -74,7 +74,6 @@ class PhishingDetectView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         finally:
-            # 🔥 Clean up all temporary files (fixes bug 11)
             for temp_path in temp_files:
                 try:
                     if os.path.exists(temp_path):
