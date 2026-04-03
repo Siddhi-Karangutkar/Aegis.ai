@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PhishGuard Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --card: #0f1525;
+            --border: rgba(0,240,255,0.1);
+            --accent: #00f0ff;
+            --text: #e8eaf0;
+            --text-dim: rgba(255,255,255,0.4);
+            --safe: #00ff88;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .settings-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            font-size: 22px;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--accent);
+            font-family: monospace;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+
+        .help-text {
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 6px;
+        }
+
+        .btn-save {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, rgba(0,240,255,0.12), rgba(0,240,255,0.05));
+            border: 1px solid rgba(0,240,255,0.3);
+            border-radius: 8px;
+            color: var(--accent);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(0,240,255,0.1));
+            box-shadow: 0 0 16px rgba(0,240,255,0.15);
+        }
+
+        .saved-msg {
+            display: inline-block;
+            margin-left: 12px;
+            color: var(--safe);
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .saved-msg.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <h1>⚙ SETTINGS</h1>
+        <p class="subtitle">Configure PhishGuard connection</p>
+
+        <div class="form-group">
+            <label>Backend API URL</label>
+            <input type="text" id="apiUrlInput" placeholder="http://localhost:8000" />
+            <p class="help-text">The URL of your Aegis.ai Django backend server. Default: http://localhost:8000</p>
+        </div>
+
+        <button class="btn-save" id="saveBtn">SAVE SETTINGS</button>
+        <span class="saved-msg" id="savedMsg">✓ Settings saved</span>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>

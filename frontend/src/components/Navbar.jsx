@@ -11,6 +11,8 @@ const Navbar = () => {
 
     const sidebarLinks = [
         { path: '/', label: 'Home' },
+        { path: '/report', label: 'Threat Detection Dashboard' },
+        { path: 'https://threatmap.checkpoint.com/', label: 'Live Threat Map', external: true },
         { path: '/awareness', label: 'Phishing Awareness Hub' },
         { path: '/cases', label: 'Real Case Studies' },
         { path: '/quiz', label: 'Interactive Quiz' },
@@ -20,7 +22,6 @@ const Navbar = () => {
         { path: '/bestpractices', label: 'Security Best Practices' },
         { path: '/blog', label: 'Threat Intelligence Blog' },
         { path: '/technology', label: 'About the Technology' },
-        { path: '/report', label: 'Report Phishing Feature' }
     ];
 
     return (
@@ -59,14 +60,27 @@ const Navbar = () => {
                 </div>
                 <div style={styles.sidebarLinksContainer}>
                     {sidebarLinks.map((link, idx) => (
-                        <Link 
-                            key={idx} 
-                            to={link.path} 
-                            style={styles.sidebarLink}
-                            onClick={toggleSidebar}
-                        >
-                            {link.label}
-                        </Link>
+                        link.external ? (
+                            <a 
+                                key={idx} 
+                                href={link.path} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                style={styles.sidebarLink}
+                                onClick={toggleSidebar}
+                            >
+                                {link.label}
+                            </a>
+                        ) : (
+                            <Link 
+                                key={idx} 
+                                to={link.path} 
+                                style={styles.sidebarLink}
+                                onClick={toggleSidebar}
+                            >
+                                {link.label}
+                            </Link>
+                        )
                     ))}
                 </div>
             </div>

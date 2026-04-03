@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=400">
+    <title>PhishGuard — AI Phishing Detection</title>
+    <link rel="stylesheet" href="popup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ─── Header ─────────────────────────────────────────── -->
+    <header id="header">
+        <div class="header-left">
+            <div class="logo-icon">🛡</div>
+            <div>
+                <h1>PhishGuard</h1>
+                <p class="subtitle">AI Phishing Detection</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <span id="statusDot" class="status-dot safe"></span>
+            <button id="settingsBtn" class="icon-btn" title="Settings">⚙</button>
+        </div>
+    </header>
+
+    <!-- ─── Auto-Scan Banner ────────────────────────────────── -->
+    <div id="autoScanBanner" class="auto-scan-banner hidden">
+        <div class="banner-content">
+            <span id="bannerIcon">✓</span>
+            <div>
+                <strong id="bannerTitle">URL Safe</strong>
+                <p id="bannerSubtitle"></p>
+            </div>
+        </div>
+        <span id="bannerScore" class="banner-score">0%</span>
+    </div>
+
+    <!-- ─── Tab Navigation ──────────────────────────────────── -->
+    <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="url">🔗 URL</button>
+        <button class="tab-btn" data-tab="page">📄 Page</button>
+        <button class="tab-btn" data-tab="message">💬 Message</button>
+        <button class="tab-btn" data-tab="files">📁 Files</button>
+    </nav>
+
+    <!-- ─── Tab Content: URL Scan ───────────────────────────── -->
+    <div id="tab-url" class="tab-content active">
+        <div class="input-group">
+            <label>Current Page URL</label>
+            <div class="url-display">
+                <span id="currentUrl" class="url-text">Loading...</span>
+            </div>
+        </div>
+        <button id="scanUrlBtn" class="scan-btn">
+            <span class="btn-icon">🔍</span> SCAN URL
+        </button>
+        <div id="urlResult" class="result-container hidden"></div>
+    </div>
+
+    <!-- ─── Tab Content: Page Scan ──────────────────────────── -->
+    <div id="tab-page" class="tab-content">
+        <p class="tab-desc">Extract and analyze all visible text on the current page for phishing indicators.</p>
+        <button id="scanPageBtn" class="scan-btn">
+            <span class="btn-icon">📑</span> SCAN PAGE CONTENT
+        </button>
+        <div id="pageResult" class="result-container hidden"></div>
+    </div>
+
+    <!-- ─── Tab Content: Message Scanner ────────────────────── -->
+    <div id="tab-message" class="tab-content">
+        <div class="input-group">
+            <label>Paste suspicious message</label>
+            <textarea id="messageInput" rows="4" placeholder="Paste an email, chat message, or SMS here..."></textarea>
+        </div>
+        <button id="scanMsgBtn" class="scan-btn">
+            <span class="btn-icon">🔍</span> ANALYZE MESSAGE
+        </button>
+        <div id="msgResult" class="result-container hidden"></div>
+    </div>
+
+    <!-- ─── Tab Content: File Detection ─────────────────────── -->
+    <div id="tab-files" class="tab-content">
+        <p class="tab-desc">PhishGuard automatically scans download links and images on every page you visit.</p>
+        <div class="info-card">
+            <div class="info-icon">🛡</div>
+            <div>
+                <strong>Auto-Protection Active</strong>
+                <p>Download links are scanned via Sandbox Analysis. Images are scanned via OCR for hidden phishing text.</p>
+            </div>
+        </div>
+        <div id="fileDetections" class="detections-list">
+            <p class="empty-state">No suspicious files detected on this page.</p>
+        </div>
+    </div>
+
+    <!-- ─── Footer ──────────────────────────────────────────── -->
+    <footer>
+        <span>Powered by <strong>Aegis.ai</strong> Engine</span>
+        <span id="connectionStatus" class="conn-status">● Connected</span>
+    </footer>
+
+    <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard Test Laboratory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --card: #151b2d;
+            --accent: #00f0ff;
+            --safe: #00ff88;
+            --danger: #ff3333;
+            --warning: #FFB300;
+            --text: #e8eaf0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            text-align: center;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        .section {
+            background: var(--card);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .test-case {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .test-case h3 {
+            font-size: 13px;
+            margin-bottom: 10px;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .legit { border-left: 4px solid var(--safe); }
+        .phish { border-left: 4px solid var(--danger); }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        a:hover {
+            color: white;
+            text-shadow: 0 0 8px var(--accent);
+        }
+
+        .message-box {
+            background: #000;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            color: #d1d1d1;
+        }
+
+        .img-container {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .img-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .badge-demo {
+            display: inline-block;
+            margin: 5px 0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PhishGuard Lab Sandbox</h1>
+        <p style="text-align: center; color: var(--text-dim); margin-bottom: 40px;">
+            A dedicated testing ground for Aegis.ai PhishGuard Extension.
+        </p>
+
+        <!-- 1. URL SCANNING -->
+        <div class="section">
+            <div class="section-title">🔗 1. URL DETECTION (Auto-Scanner)</div>
+            <div class="test-grid">
+                <div class="test-case legit">
+                    <h3>Legitimate Official URL</h3>
+                    <p>This is a safe link to Google. Extension should show **Safe**.</p>
+                    <a href="https://www.google.com">Google.com (Safe Official)</a>
+                </div>
+                <div class="test-case phish">
+                    <h3>Phishing-Pattern URL</h3>
+                    <p>This is a simulated phishing domain with brand impersonation. Extension should show **Malicious**.</p>
+                    <a href="http://secure-paypal-login.verify.com.safe-net.ga/">PayPal Verification Link (Simulation)</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. FILE SCANNING -->
+        <div class="section">
+            <div class="section-title">📁 2. FILE/DOWNLOAD SCANNING (Sandbox Engine)</div>
+            <div class="test-grid">
+                <div class="test-case legit">
+                    <h3>Safe Document Link</h3>
+                    <p>Extension should identify this as a Safe PDF document.</p>
+                    <a href="https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/pdf_open_parameters.pdf">Official Adobe Documentation (PDF)</a>
+                </div>
+                <div class="test-case phish">
+                    <h3>Suspicious Executable</h3>
+                    <p>Extension should detect the double extension and high-risk file type.</p>
+                    <a href="http://internal-bank-updates.com/downloads/URGENT_INVOICE.pdf.exe">Download Urgent Invoice (PDF.EXE Attack)</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. CONTENT SCANNING -->
+        <div class="section">
+            <div class="section-title">📑 3. PAGE CONTENT SCANNING (Message Detection)</div>
+            <div class="test-grid">
+                <div class="test-case legit">
+                    <h3>Legitimate Business Text</h3>
+                    <p>Regular corporate communication text.</p>
+                    <div class="message-box">
+Hi Team,
+The meeting is scheduled for 3 PM today. Please find the slides attached below for your review before we begin.
+
+Thanks,
+Management.
+                    </div>
+                </div>
+                <div class="test-case phish">
+                    <h3>Phishing Urgent Message</h3>
+                    <p>Extension should auto-detect this text and flag it as phishing.</p>
+                    <div class="message-box">
+🚨 SECURITY ALERT! 🚨
+We have detected suspicious activity from an unknown device in your Chase Bank account.
+
+To avoid account suspension, you MUST verify your credentials.
+CLICK HERE: http://chase-bank-verify-com.security-check.xyz/
+
+Failure to follow these instructions will result in your funds being frozen immediately!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. IMAGE OCR SCANNING -->
+        <div class="section">
+            <div class="section-title">🖼 4. IMAGE OCR DETECTION (Hidden Phishing Text)</div>
+            <div class="test-grid">
+                <div class="test-case phish" style="grid-column: span 2;">
+                    <h3>Suspicious Email Screenshot</h3>
+                    <p style="margin-bottom: 15px;">The extension's **EasyOCR** engine will fetch this image and scan the pixels for phishing templates.</p>
+                    <div class="img-container">
+                        <img src="phishing_email.png" alt="Phishing Screenshot for OCR Testing">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p style="text-align: center; font-size: 12px; color: var(--accent); margin-top: 50px;">
+            Aegis Intelligence Terminal • [System Active] • Version 2.0.4
+        </p>
+    </div>
+</body>
+</html>

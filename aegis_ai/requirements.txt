@@ -8,3 +8,5 @@ python-dotenv
 django-cors-headers
 scikit-learn
 joblib
+easyocr
+requests
