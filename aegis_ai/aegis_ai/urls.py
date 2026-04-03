@@ -20,16 +20,11 @@ from django.urls import path, include
 from django.http import JsonResponse
 from django.conf import settings
 from django.conf.urls.static import static
+from django.shortcuts import render
 
 # Simple homepage
 def home_view(request):
-    return JsonResponse({
-        "message": "Welcome to aegis.ai - Zero-Day Phishing Detection Engine",
-        "status": "active",
-        "api_endpoint": "/api/detect/",
-        "documentation": "Send POST request to /api/detect/ with email_text or attachments",
-        "version": "0.1.0"
-    })
+    return render(request, 'test_api.html')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

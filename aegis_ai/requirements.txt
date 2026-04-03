@@ -8,3 +8,4 @@ pytesseract
 pyzbar
 Pillow
 python-dotenv
+django-cors-headers

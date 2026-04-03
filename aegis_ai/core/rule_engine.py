@@ -1,23 +1,30 @@
 class RuleEngine:
+    FREE_EMAIL_DOMAINS = {
+        'gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com',
+        'protonmail.com', 'icloud.com', 'aol.com', 'yandex.com'
+    }
+
     def analyze(self, data: dict) -> dict:
         score = 0.0
         reasons = []
 
-        sender_email = data.get('sender_email', '')
-        sender_name = data.get('sender_name', '')
+        sender_email = data.get('sender_email', '').lower()
+        sender_name = data.get('sender_name', '').lower()
 
-        # Rule 1: Sender name vs email mismatch (common in phishing)
-        if sender_email and sender_name:
-            domain = sender_email.split('@')[-1].lower()
-            if domain not in sender_name.lower():
-                score += 0.4
-                reasons.append("Sender name and email domain mismatch")
+        if sender_email and '@' in sender_email:
+            domain = sender_email.split('@')[-1]
 
-        # Rule 2: Too many URLs in one email
-        if len(data.get('urls', [])) > 3:
-            score += 0.3
-            reasons.append("Excessive number of URLs in email")
+            # Rule 1: Company name + free email domain (classic phishing)
+            if domain in self.FREE_EMAIL_DOMAINS and any(word in sender_name for word in ['bank', 'support', 'security', 'admin', 'paypal', 'amazon']):
+                score += 0.45
+                reasons.append("Company name used with free email domain (phishing pattern)")
 
-        score = min(score, 1.0)
+            # Rule 2: Too many URLs
+            if len(data.get('urls', [])) > 3:
+                score += 0.30
+                reasons.append("Excessive number of URLs in single email")
 
-        return {'score': score, 'reasons': reasons}
+        return {
+            'score': round(min(score, 1.0), 2),
+            'reasons': reasons
+        }

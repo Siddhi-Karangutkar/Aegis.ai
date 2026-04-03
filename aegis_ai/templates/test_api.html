@@ -2,45 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>aegis.ai - Test Phishing Detection</title>
+    <title>aegis.ai - Test</title>
     <style>
         body { font-family: Arial; margin: 40px; }
         textarea { width: 100%; height: 150px; }
-        button { padding: 10px 20px; font-size: 16px; }
-        pre { background: #f4f4f4; padding: 15px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; }
+        button { padding: 12px 25px; background: #1a73e8; color: white; border: none; font-size: 16px; }
+        pre { background: #222; color: #0f0; padding: 15px; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <h1>aegis.ai Phishing Detection Tester</h1>
+    <h1>🚀 aegis.ai Phishing Detection Tester</h1>
     
-    <form id="testForm">
-        <label><strong>Email Text:</strong></label><br>
-        <textarea id="email_text" placeholder="Paste email body here...">Dear customer, your account has been suspended. Please click here to verify immediately: https://secure-bank-login-update.com/verify-now</textarea><br><br>
-        
-        <label><strong>Sender Email:</strong></label><br>
-        <input type="text" id="sender_email" value="alert@bank-security.com"><br><br>
-        
-        <label><strong>Sender Name:</strong></label><br>
-        <input type="text" id="sender_name" value="Bank of America Support"><br><br>
-        
-        <button type="button" onclick="sendRequest()">🚀 Test Detection</button>
-    </form>
+    <textarea id="email_text" rows="6">Dear customer, your account has been suspended. Please verify immediately: https://secure-bank-login-update.com/verify</textarea><br><br>
+    
+    <input type="text" id="sender_email" value="alert@bank-security.com" placeholder="Sender Email"><br><br>
+    <input type="text" id="sender_name" value="Bank of America Support" placeholder="Sender Name"><br><br>
+    
+    <button onclick="testDetection()">🚀 Run Detection</button>
 
     <h2>Result:</h2>
     <pre id="result">Click the button to test...</pre>
 
     <script>
-        async function sendRequest() {
+        async function testDetection() {
             const payload = {
                 email_text: document.getElementById('email_text').value,
                 sender_email: document.getElementById('sender_email').value,
-                sender_name: document.getElementById('sender_name').value,
-                urls: []
+                sender_name: document.getElementById('sender_name').value
             };
 
             const res = await fetch('/api/detect/', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(payload)
             });
 

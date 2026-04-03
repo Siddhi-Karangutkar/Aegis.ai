@@ -2,34 +2,37 @@ import re
 
 class TextAnalyzer:
     def analyze(self, text: str) -> dict:
-        if not text:
+        if not text or not text.strip():
             return {'score': 0.0, 'reasons': []}
 
+        text_lower = text.lower()
         score = 0.0
         reasons = []
 
-        text_lower = text.lower()
+        # Category-based scoring (no more unbounded accumulation)
+        # Each category has a hard cap
 
-        # Urgency indicators
+        # 1. Urgency / Pressure
         urgency_words = ['immediately', 'urgent', 'suspended', 'verify now', 'account locked',
-                        'suspension', 'action required', 'limited time']
-        for word in urgency_words:
-            if word in text_lower:
-                score += 0.25
-                reasons.append("Urgency language detected")
+                         'suspension', 'action required', 'limited time', 'expires soon']
+        if any(word in text_lower for word in urgency_words):
+            score += 0.35
+            reasons.append("Urgency / pressure language detected")
 
-        # Credential phishing phrases
-        credential_phrases = ['password', 'otp', 'pin', 'login credentials', 'verify your identity']
-        for phrase in credential_phrases:
-            if phrase in text_lower:
-                score += 0.20
-                reasons.append("Request for credentials or OTP detected")
+        # 2. Credential / OTP phishing
+        credential_phrases = ['password', 'otp', 'pin', 'login credentials', 'verify your identity',
+                              'confirm your account', 'enter your details']
+        if any(phrase in text_lower for phrase in credential_phrases):
+            score += 0.35
+            reasons.append("Request for credentials / OTP detected")
 
-        # Impersonation
-        if any(bank in text_lower for bank in ['bank', 'paypal', 'amazon', 'microsoft', 'google']):
-            score += 0.15
+        # 3. Brand impersonation
+        brands = ['bank', 'paypal', 'amazon', 'microsoft', 'google', 'apple', 'facebook']
+        if any(brand in text_lower for brand in brands):
+            score += 0.30
             reasons.append("Impersonation of trusted brand")
 
-        score = min(score, 1.0)
-
-        return {'score': score, 'reasons': reasons}
+        return {
+            'score': round(min(score, 1.0), 2),
+            'reasons': reasons
+        }
