@@ -283,3 +283,691 @@ Reshape your data either using array.reshape(-1, 1) if your data has a single fe
 [2026-04-04 00:30:03] [INFO] [aegis.api] [REQ-d4777062] Verdict: suspicious | Score: 0.42
 [2026-04-04 00:30:03] [INFO] [aegis.api] [REQ-d4777062] Reasons: ['Urgency language detected: expire', 'Click-bait pattern: click here', 'URL shortener detected — possible redirect masking']
 [2026-04-04 00:30:03] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:34:23] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693] ── New Detection Request ──
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693] Client IP: 127.0.0.1
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693] Content-Type: application/x-www-form-urlencoded
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693] Input summary:
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693]   URLs provided: 1 → ['http://paypal-verify-login.com/auth']
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693]   Sender: (not provided)
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693]   Attachments: 0 file(s)
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693] ── Triggering Detection Pipeline ──
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:34:23] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:34:23] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:34:23] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:34:23] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:34:23] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://paypal-verify-login.com/auth']
+[2026-04-04 00:34:23] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://paypal-verify-login.com/auth'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:34:23] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:34:23] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.6, reasons=['Phishing keywords found in URL: login, verify, auth']
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] ← URL score: 0.6 | Reasons: 1
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:34:23] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:34:23] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:34:23] [INFO] [aegis.fusion] [fusion.py] Inputs → text=0.0, url=0.6, rule=0.0, has_urls=True
+[2026-04-04 00:34:23] [INFO] [aegis.fusion] [fusion.py] All signals → weighted: 0.40*text + 0.35*url + 0.25*rule = 0.210
+[2026-04-04 00:34:23] [INFO] [aegis.fusion] [fusion.py] Moderate signal boost applied (max=0.6) → 0.360
+[2026-04-04 00:34:23] [INFO] [aegis.fusion] [fusion.py] Final fused score: 0.36
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] ← Fused score: 0.36
+[2026-04-04 00:34:23] [INFO] [aegis.engine] [REQ-fdeb4693] [engine.py] Final verdict: suspicious (0.36)
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693] ── Detection Complete ──
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693] Verdict: suspicious | Score: 0.36
+[2026-04-04 00:34:23] [INFO] [aegis.api] [REQ-fdeb4693] Reasons: ['Phishing keywords found in URL: login, verify, auth']
+[2026-04-04 00:34:23] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:35:55] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477] ── New Detection Request ──
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477] Client IP: 127.0.0.1
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477] Content-Type: application/x-www-form-urlencoded
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477] Input summary:
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477]   URLs provided: 1 → ['http://paypal-verify-login.com/auth']
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477]   Sender: (not provided)
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477]   Attachments: 0 file(s)
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477] ── Triggering Detection Pipeline ──
+[2026-04-04 00:35:55] [INFO] [aegis.api] [REQ-12a23477] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:35:55] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:35:57] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:35:57] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:35:57] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:35:57] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://paypal-verify-login.com/auth']
+[2026-04-04 00:35:57] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://paypal-verify-login.com/auth'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:35:57] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:35:57] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=1.0, reasons=["Brand impersonation: 'paypal' in domain but not paypal.com", 'Phishing keywords in URL: login, verify, auth', 'Hyphen-heavy domain: paypal-verify-login.com']
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] ← URL score: 1.0 | Reasons: 3
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:35:57] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:35:57] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] ← Fused score: 1.0
+[2026-04-04 00:35:57] [INFO] [aegis.engine] [REQ-12a23477] [engine.py] Final verdict: malicious (1.0)
+[2026-04-04 00:35:57] [INFO] [aegis.api] [REQ-12a23477] ── Detection Complete ──
+[2026-04-04 00:35:57] [INFO] [aegis.api] [REQ-12a23477] Verdict: malicious | Score: 1.0
+[2026-04-04 00:35:57] [INFO] [aegis.api] [REQ-12a23477] Reasons: ["Brand impersonation: 'paypal' in domain but not paypal.com", 'Phishing keywords in URL: login, verify, auth', 'Hyphen-heavy domain: paypal-verify-login.com']
+[2026-04-04 00:35:57] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:36:07] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16] ── New Detection Request ──
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16] Client IP: 127.0.0.1
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16] Content-Type: application/x-www-form-urlencoded
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16] Input summary:
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16]   URLs provided: 1 → ['https://www.google.com']
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16]   Sender: (not provided)
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16]   Attachments: 0 file(s)
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16] ── Triggering Detection Pipeline ──
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:36:07] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:36:07] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:36:07] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:36:07] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:36:07] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['https://www.google.com']
+[2026-04-04 00:36:07] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['https://www.google.com'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:36:07] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:36:07] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.0, reasons=[]
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] ← URL score: 0.0 | Reasons: 0
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:36:07] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:36:07] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] ← Fused score: 0.0
+[2026-04-04 00:36:07] [INFO] [aegis.engine] [REQ-59875b16] [engine.py] Final verdict: benign (0.0)
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16] ── Detection Complete ──
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16] Verdict: benign | Score: 0.0
+[2026-04-04 00:36:07] [INFO] [aegis.api] [REQ-59875b16] Reasons: []
+[2026-04-04 00:36:07] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:37:51] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956] ── New Detection Request ──
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956] Client IP: 127.0.0.1
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956] Content-Type: multipart/form-data; boundary=----WebKitFormBoundarySeLqy6xosZNmsb8n
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956] Input summary:
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956]   URLs provided: 1 → ['http://paypa1-login-security-alert.com']
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956]   Sender: (not provided)
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956]   Attachments: 0 file(s)
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956] ── Triggering Detection Pipeline ──
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:37:51] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:37:51] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:37:51] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:37:51] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:37:51] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://paypa1-login-security-alert.com']
+[2026-04-04 00:37:51] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://paypa1-login-security-alert.com'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:37:51] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:37:51] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=1.0, reasons=['Possible character substitution/homoglyph attack', 'Phishing keywords in URL: login, security', 'URL shortener detected — possible redirect masking', 'Hyphen-heavy domain: paypa1-login-security-alert.com']
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] ← URL score: 1.0 | Reasons: 4
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:37:51] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:37:51] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] ← Fused score: 1.0
+[2026-04-04 00:37:51] [INFO] [aegis.engine] [REQ-18774956] [engine.py] Final verdict: malicious (1.0)
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956] ── Detection Complete ──
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956] Verdict: malicious | Score: 1.0
+[2026-04-04 00:37:51] [INFO] [aegis.api] [REQ-18774956] Reasons: ['Possible character substitution/homoglyph attack', 'Phishing keywords in URL: login, security', 'URL shortener detected — possible redirect masking', 'Hyphen-heavy domain: paypa1-login-security-alert.com']
+[2026-04-04 00:37:51] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:38:19] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3] ── New Detection Request ──
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3] Client IP: 127.0.0.1
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryH9OR7gzQvCh34018
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3] Input summary:
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3]   URLs provided: 1 → ['https://www.google.com/']
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3]   Sender: (not provided)
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3]   Attachments: 0 file(s)
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3] ── Triggering Detection Pipeline ──
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:38:19] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:38:19] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:38:19] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:38:19] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:38:19] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['https://www.google.com/']
+[2026-04-04 00:38:19] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['https://www.google.com/'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:38:19] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:38:19] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.0, reasons=[]
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] ← URL score: 0.0 | Reasons: 0
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:38:19] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:38:19] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] ← Fused score: 0.0
+[2026-04-04 00:38:19] [INFO] [aegis.engine] [REQ-31f699d3] [engine.py] Final verdict: benign (0.0)
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3] ── Detection Complete ──
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3] Verdict: benign | Score: 0.0
+[2026-04-04 00:38:19] [INFO] [aegis.api] [REQ-31f699d3] Reasons: []
+[2026-04-04 00:38:19] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:38:42] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:38:42] [INFO] [aegis.api] [REQ-027d15e9] ── New Detection Request ──
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9] Client IP: 127.0.0.1
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9] Content-Type: multipart/form-data; boundary=----WebKitFormBoundary33jdbBD9kBf0iA83
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9] Input summary:
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9]   URLs provided: 1 → ['https://www.ved.com/']
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9]   Sender: (not provided)
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9]   Attachments: 0 file(s)
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9] ── Triggering Detection Pipeline ──
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:38:43] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:38:43] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:38:43] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:38:43] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:38:43] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['https://www.ved.com/']
+[2026-04-04 00:38:43] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['https://www.ved.com/'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:38:43] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:38:43] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.0, reasons=[]
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] ← URL score: 0.0 | Reasons: 0
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:38:43] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:38:43] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] ← Fused score: 0.0
+[2026-04-04 00:38:43] [INFO] [aegis.engine] [REQ-027d15e9] [engine.py] Final verdict: benign (0.0)
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9] ── Detection Complete ──
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9] Verdict: benign | Score: 0.0
+[2026-04-04 00:38:43] [INFO] [aegis.api] [REQ-027d15e9] Reasons: []
+[2026-04-04 00:38:43] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:39:51] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02] ── New Detection Request ──
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02] Client IP: 127.0.0.1
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02] Content-Type: multipart/form-data; boundary=----WebKitFormBoundary5QYnF8K3xhzEqVG3
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02] Input summary:
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02]   URLs provided: 1 → ['http://secure-login-amazon.ga/verify.php?id=20044']
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02]   Sender: (not provided)
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02]   Attachments: 0 file(s)
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02] ── Triggering Detection Pipeline ──
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:39:51] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:39:51] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:39:51] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:39:51] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:39:51] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://secure-login-amazon.ga/verify.php?id=20044']
+[2026-04-04 00:39:51] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://secure-login-amazon.ga/verify.php?id=20044'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:39:51] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:39:51] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=1.0, reasons=['Hyphen-heavy domain: secure-login-amazon.ga', "Brand impersonation: 'amazon' in domain but not amazon.com", 'Phishing keywords in URL: login, verify, secure', 'Suspicious top-level domain detected']
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] ← URL score: 1.0 | Reasons: 4
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:39:51] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:39:51] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] ← Fused score: 1.0
+[2026-04-04 00:39:51] [INFO] [aegis.engine] [REQ-6b76cd02] [engine.py] Final verdict: malicious (1.0)
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02] ── Detection Complete ──
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02] Verdict: malicious | Score: 1.0
+[2026-04-04 00:39:51] [INFO] [aegis.api] [REQ-6b76cd02] Reasons: ['Hyphen-heavy domain: secure-login-amazon.ga', "Brand impersonation: 'amazon' in domain but not amazon.com", 'Phishing keywords in URL: login, verify, secure', 'Suspicious top-level domain detected']
+[2026-04-04 00:39:51] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:40:09] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b] ── New Detection Request ──
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b] Client IP: 127.0.0.1
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b] Content-Type: multipart/form-data; boundary=----WebKitFormBoundary2nsXbdlHRP9PHLhm
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b] Input summary:
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b]   URLs provided: 1 → ['http://paypal-auth-confirm.ru/verify.php?id=19673']
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b]   Sender: (not provided)
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b]   Attachments: 0 file(s)
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b] ── Triggering Detection Pipeline ──
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:40:09] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:40:09] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:40:09] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:40:09] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:40:09] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://paypal-auth-confirm.ru/verify.php?id=19673']
+[2026-04-04 00:40:09] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://paypal-auth-confirm.ru/verify.php?id=19673'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:40:09] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:40:09] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=1.0, reasons=["Brand impersonation: 'paypal' in domain but not paypal.com", 'Phishing keywords in URL: verify, confirm, auth', 'Hyphen-heavy domain: paypal-auth-confirm.ru']
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] ← URL score: 1.0 | Reasons: 3
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:40:09] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:40:09] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] ← Fused score: 1.0
+[2026-04-04 00:40:09] [INFO] [aegis.engine] [REQ-a51c197b] [engine.py] Final verdict: malicious (1.0)
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b] ── Detection Complete ──
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b] Verdict: malicious | Score: 1.0
+[2026-04-04 00:40:09] [INFO] [aegis.api] [REQ-a51c197b] Reasons: ["Brand impersonation: 'paypal' in domain but not paypal.com", 'Phishing keywords in URL: verify, confirm, auth', 'Hyphen-heavy domain: paypal-auth-confirm.ru']
+[2026-04-04 00:40:09] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:40:22] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e] ── New Detection Request ──
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e] Client IP: 127.0.0.1
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e] Content-Type: multipart/form-data; boundary=----WebKitFormBoundarytFY64ILtnLF9XVql
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e] Input summary:
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e]   URLs provided: 1 → ['http://service-update-login.cf/banking/login']
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e]   Sender: (not provided)
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e]   Attachments: 0 file(s)
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e] ── Triggering Detection Pipeline ──
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:40:22] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:40:22] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:40:22] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:40:22] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:40:22] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://service-update-login.cf/banking/login']
+[2026-04-04 00:40:22] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://service-update-login.cf/banking/login'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:40:22] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:40:22] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=1.0, reasons=['Phishing keywords in URL: login, update, banking', 'Hyphen-heavy domain: service-update-login.cf', 'Suspicious top-level domain detected']
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] ← URL score: 1.0 | Reasons: 3
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:40:22] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:40:22] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] ← Fused score: 1.0
+[2026-04-04 00:40:22] [INFO] [aegis.engine] [REQ-b3f01c5e] [engine.py] Final verdict: malicious (1.0)
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e] ── Detection Complete ──
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e] Verdict: malicious | Score: 1.0
+[2026-04-04 00:40:22] [INFO] [aegis.api] [REQ-b3f01c5e] Reasons: ['Phishing keywords in URL: login, update, banking', 'Hyphen-heavy domain: service-update-login.cf', 'Suspicious top-level domain detected']
+[2026-04-04 00:40:22] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:40:38] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7] ── New Detection Request ──
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7] Client IP: 127.0.0.1
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryhIjzYmjmlPIagp9L
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7] Input summary:
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7]   URLs provided: 1 → ['http://billing-secure-account.ru/account/login']
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7]   Sender: (not provided)
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7]   Attachments: 0 file(s)
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7] ── Triggering Detection Pipeline ──
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:40:38] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:40:38] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:40:38] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:40:38] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:40:38] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://billing-secure-account.ru/account/login']
+[2026-04-04 00:40:38] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://billing-secure-account.ru/account/login'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:40:38] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:40:38] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.75, reasons=['Hyphen-heavy domain: billing-secure-account.ru', 'Phishing keywords in URL: login, secure, account']
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] ← URL score: 0.75 | Reasons: 2
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:40:38] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:40:38] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] ← Fused score: 0.75
+[2026-04-04 00:40:38] [INFO] [aegis.engine] [REQ-e63432c7] [engine.py] Final verdict: malicious (0.75)
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7] ── Detection Complete ──
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7] Verdict: malicious | Score: 0.75
+[2026-04-04 00:40:38] [INFO] [aegis.api] [REQ-e63432c7] Reasons: ['Hyphen-heavy domain: billing-secure-account.ru', 'Phishing keywords in URL: login, secure, account']
+[2026-04-04 00:40:38] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:41:21] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532] ── New Detection Request ──
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532] Client IP: 127.0.0.1
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532] Content-Type: multipart/form-data; boundary=----WebKitFormBoundary4bs8SmbB09B4bxJ5
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532] Input summary:
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532]   URLs provided: 1 → ['https://www.google.com/docs']
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532]   Sender: (not provided)
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532]   Attachments: 0 file(s)
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532] ── Triggering Detection Pipeline ──
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:41:21] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:41:21] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:41:21] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:41:21] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:41:21] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['https://www.google.com/docs']
+[2026-04-04 00:41:21] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['https://www.google.com/docs'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:41:21] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:41:21] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.0, reasons=[]
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] ← URL score: 0.0 | Reasons: 0
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:41:21] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:41:21] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] ← Fused score: 0.0
+[2026-04-04 00:41:21] [INFO] [aegis.engine] [REQ-69c92532] [engine.py] Final verdict: benign (0.0)
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532] ── Detection Complete ──
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532] Verdict: benign | Score: 0.0
+[2026-04-04 00:41:21] [INFO] [aegis.api] [REQ-69c92532] Reasons: []
+[2026-04-04 00:41:21] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:41:33] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160] ── New Detection Request ──
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160] Client IP: 127.0.0.1
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160] Content-Type: multipart/form-data; boundary=----WebKitFormBoundary23cgSxj56GLMBNdl
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160] Input summary:
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160]   URLs provided: 1 → ['http://billing-secure-account.ru/account/login']
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160]   Sender: (not provided)
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160]   Attachments: 0 file(s)
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160] ── Triggering Detection Pipeline ──
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:41:33] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:41:33] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:41:33] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:41:33] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:41:33] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://billing-secure-account.ru/account/login']
+[2026-04-04 00:41:33] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://billing-secure-account.ru/account/login'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:41:33] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:41:33] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.75, reasons=['Hyphen-heavy domain: billing-secure-account.ru', 'Phishing keywords in URL: login, secure, account']
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] ← URL score: 0.75 | Reasons: 2
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:41:33] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:41:33] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] ← Fused score: 0.75
+[2026-04-04 00:41:33] [INFO] [aegis.engine] [REQ-c49bd160] [engine.py] Final verdict: malicious (0.75)
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160] ── Detection Complete ──
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160] Verdict: malicious | Score: 0.75
+[2026-04-04 00:41:33] [INFO] [aegis.api] [REQ-c49bd160] Reasons: ['Hyphen-heavy domain: billing-secure-account.ru', 'Phishing keywords in URL: login, secure, account']
+[2026-04-04 00:41:33] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:42:11] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5] ── New Detection Request ──
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5] Client IP: 127.0.0.1
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5] Content-Type: multipart/form-data; boundary=----WebKitFormBoundarytPLkNd8ZXB84kRHL
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5] Input summary:
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5]   URLs provided: 1 → ['http://amazon-check-verify.ml/secure?token=330261']
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5]   Sender: (not provided)
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5]   Attachments: 0 file(s)
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5] ── Triggering Detection Pipeline ──
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:42:11] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:42:11] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:42:11] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:42:11] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:42:11] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://amazon-check-verify.ml/secure?token=330261']
+[2026-04-04 00:42:11] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://amazon-check-verify.ml/secure?token=330261'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:42:11] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:42:11] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=1.0, reasons=['Hyphen-heavy domain: amazon-check-verify.ml', "Brand impersonation: 'amazon' in domain but not amazon.com", 'Phishing keywords in URL: verify, secure', 'Suspicious top-level domain detected']
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] ← URL score: 1.0 | Reasons: 4
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:42:11] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:42:11] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] ← Fused score: 1.0
+[2026-04-04 00:42:11] [INFO] [aegis.engine] [REQ-c68592f5] [engine.py] Final verdict: malicious (1.0)
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5] ── Detection Complete ──
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5] Verdict: malicious | Score: 1.0
+[2026-04-04 00:42:11] [INFO] [aegis.api] [REQ-c68592f5] Reasons: ['Hyphen-heavy domain: amazon-check-verify.ml', "Brand impersonation: 'amazon' in domain but not amazon.com", 'Phishing keywords in URL: verify, secure', 'Suspicious top-level domain detected']
+[2026-04-04 00:42:11] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:42:26] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1] ── New Detection Request ──
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1] Client IP: 127.0.0.1
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1] Content-Type: multipart/form-data; boundary=----WebKitFormBoundary4xcjWZPd2PJUlH3y
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1] Input summary:
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1]   URLs provided: 1 → ['https://www.wikipedia.org/settings']
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1]   Sender: (not provided)
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1]   Attachments: 0 file(s)
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1] ── Triggering Detection Pipeline ──
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:42:26] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:42:26] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:42:26] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:42:26] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:42:26] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['https://www.wikipedia.org/settings']
+[2026-04-04 00:42:26] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['https://www.wikipedia.org/settings'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:42:26] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:42:26] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.0, reasons=[]
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] ← URL score: 0.0 | Reasons: 0
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:42:26] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:42:26] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] ← Fused score: 0.0
+[2026-04-04 00:42:26] [INFO] [aegis.engine] [REQ-c2effcc1] [engine.py] Final verdict: benign (0.0)
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1] ── Detection Complete ──
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1] Verdict: benign | Score: 0.0
+[2026-04-04 00:42:26] [INFO] [aegis.api] [REQ-c2effcc1] Reasons: []
+[2026-04-04 00:42:26] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:43:28] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd] ── New Detection Request ──
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd] Client IP: 127.0.0.1
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryKXbGIhnOWNdlehbQ
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd] Input summary:
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd]   URLs provided: 1 → ['http://billing-secure-account.ru/account/login']
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd]   Sender: (not provided)
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd]   Attachments: 0 file(s)
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd] ── Triggering Detection Pipeline ──
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:43:28] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:43:28] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:43:28] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:43:28] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:43:28] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://billing-secure-account.ru/account/login']
+[2026-04-04 00:43:28] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://billing-secure-account.ru/account/login'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:43:28] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:43:28] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.75, reasons=['Hyphen-heavy domain: billing-secure-account.ru', 'Phishing keywords in URL: login, secure, account']
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] ← URL score: 0.75 | Reasons: 2
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:43:28] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:43:28] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] ← Fused score: 0.75
+[2026-04-04 00:43:28] [INFO] [aegis.engine] [REQ-a5e6a7bd] [engine.py] Final verdict: malicious (0.75)
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd] ── Detection Complete ──
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd] Verdict: malicious | Score: 0.75
+[2026-04-04 00:43:28] [INFO] [aegis.api] [REQ-a5e6a7bd] Reasons: ['Hyphen-heavy domain: billing-secure-account.ru', 'Phishing keywords in URL: login, secure, account']
+[2026-04-04 00:43:28] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:43:58] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392] ── New Detection Request ──
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392] Client IP: 127.0.0.1
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryGMpTJfRaa2AlVuJG
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392] Input summary:
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392]   URLs provided: 1 → ['http://billing-secure-password.ga/verify.php?id=28528']
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392]   Sender: (not provided)
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392]   Attachments: 0 file(s)
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392] ── Triggering Detection Pipeline ──
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:43:58] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:43:58] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:43:58] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:43:58] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:43:58] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['http://billing-secure-password.ga/verify.php?id=28528']
+[2026-04-04 00:43:58] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['http://billing-secure-password.ga/verify.php?id=28528'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:43:58] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:43:58] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=1.0, reasons=['Hyphen-heavy domain: billing-secure-password.ga', 'Suspicious top-level domain detected', 'Phishing keywords in URL: verify, secure, password']
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] ← URL score: 1.0 | Reasons: 3
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:43:58] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:43:58] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] ← Fused score: 1.0
+[2026-04-04 00:43:58] [INFO] [aegis.engine] [REQ-4ead2392] [engine.py] Final verdict: malicious (1.0)
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392] ── Detection Complete ──
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392] Verdict: malicious | Score: 1.0
+[2026-04-04 00:43:58] [INFO] [aegis.api] [REQ-4ead2392] Reasons: ['Hyphen-heavy domain: billing-secure-password.ga', 'Suspicious top-level domain detected', 'Phishing keywords in URL: verify, secure, password']
+[2026-04-04 00:43:58] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:45:03] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a] ── New Detection Request ──
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a] Client IP: 127.0.0.1
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryUyiMiDBuGBxqkEhm
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a] Input summary:
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a]   URLs provided: 1 → ['https://www.amazon.in/settings']
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a]   Sender: (not provided)
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a]   Attachments: 0 file(s)
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a] ── Triggering Detection Pipeline ──
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:45:03] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:45:03] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:45:03] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:45:03] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:45:03] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['https://www.amazon.in/settings']
+[2026-04-04 00:45:03] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['https://www.amazon.in/settings'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:45:03] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:45:03] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.4, reasons=["Brand impersonation: 'amazon' in domain but not amazon.com"]
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] ← URL score: 0.4 | Reasons: 1
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:45:03] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:45:03] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] ← Fused score: 0.4
+[2026-04-04 00:45:03] [INFO] [aegis.engine] [REQ-44797d1a] [engine.py] Final verdict: suspicious (0.4)
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a] ── Detection Complete ──
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a] Verdict: suspicious | Score: 0.4
+[2026-04-04 00:45:03] [INFO] [aegis.api] [REQ-44797d1a] Reasons: ["Brand impersonation: 'amazon' in domain but not amazon.com"]
+[2026-04-04 00:45:03] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:46:35] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3] ── New Detection Request ──
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3] Client IP: 127.0.0.1
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryLXENxyAxoCfS77Aa
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3] Input summary:
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3]   Email text: 0 chars | Preview: ''...
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3]   URLs provided: 1 → ['https://www.amazon.in/settings']
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3]   Sender: (not provided)
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3]   Attachments: 0 file(s)
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3] ── Triggering Detection Pipeline ──
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3] → core/engine.py → PhishingEngine.detect()
+[2026-04-04 00:46:35] [INFO] [aegis.text] [text_analyzer.py] TextAnalyzer initialized (heuristic mode)
+[2026-04-04 00:46:35] [INFO] [aegis.url] ✅ URL ML model loaded successfully
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] Running preprocessor → extract_urls_from_text()
+[2026-04-04 00:46:35] [INFO] [aegis.preprocessor] [preprocessor.py] Extracted 0 URL(s) from text (0 chars)
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] Total URLs for analysis: 1
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] → Triggering: core/text_analyzer.py → TextAnalyzer.analyze()
+[2026-04-04 00:46:35] [INFO] [aegis.text] [text_analyzer.py] Empty text received — returning score 0.0
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] ← Text score: 0.0 | Reasons: 0
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] → Triggering: core/url_analyzer.py → URLAnalyzer.analyze()
+[2026-04-04 00:46:35] [INFO] [aegis.url] [url_analyzer.py] Analyzing 1 URL(s): ['https://www.amazon.in/settings']
+[2026-04-04 00:46:35] [ERROR] [aegis.url] [url_analyzer.py] ML prediction failed: Expected 2D array, got 1D array instead:
+array=['https://www.amazon.in/settings'].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.. Falling back to heuristics.
+[2026-04-04 00:46:35] [INFO] [aegis.url] [url_analyzer.py] → Triggering: core/url_analyzer_fallback.py → fallback_url_analyze()
+[2026-04-04 00:46:35] [INFO] [aegis.url] [url_analyzer.py] ← Heuristic Result: score=0.4, reasons=["Brand impersonation: 'amazon' in domain but not amazon.com"]
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] ← URL score: 0.4 | Reasons: 1
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] → Triggering: core/rule_engine.py → RuleEngine.analyze()
+[2026-04-04 00:46:35] [INFO] [aegis.rules] [rule_engine.py] Running deterministic rule analysis
+[2026-04-04 00:46:35] [INFO] [aegis.rules] [rule_engine.py] Rules complete → score=0.0, 0 reason(s) fired
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] ← Rule score: 0.0 | Reasons: 0
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] → Triggering: core/fusion.py → fuse_scores()
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] ← Fused score: 0.4
+[2026-04-04 00:46:35] [INFO] [aegis.engine] [REQ-ff9b49d3] [engine.py] Final verdict: suspicious (0.4)
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3] ── Detection Complete ──
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3] Verdict: suspicious | Score: 0.4
+[2026-04-04 00:46:35] [INFO] [aegis.api] [REQ-ff9b49d3] Reasons: ["Brand impersonation: 'amazon' in domain but not amazon.com"]
+[2026-04-04 00:46:35] [INFO] [aegis.api] ════════════════════════════════════════════════════════════
