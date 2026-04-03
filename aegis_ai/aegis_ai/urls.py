@@ -33,8 +33,9 @@ def test_api_view(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-    path('test-api/', test_api_view, name='test_api'), # New path for the remote utility
-    path('', home_view, name='home'),                # Main React platform
+    path('test-api/', test_api_view, name='test_api'),
+    path('report/', home_view, name='report'),      # Added to support dashboard navigation
+    path('', home_view, name='home'),               # Main React platform
 ]
 
 if settings.DEBUG:

@@ -1,6 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import AllowAny
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 import os
 import tempfile
 import uuid
@@ -10,11 +14,15 @@ from .serializers import PhishingDetectionSerializer
 from core.preprocessor import extract_pdf_text, extract_urls_from_text
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class PhishingDetectView(APIView):
     """
     aegis.ai - Zero-Day Phishing Detection API
     Handles text, URLs, and PDF attachments with proper cleanup.
     """
+    permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
     def post(self, request):
         serializer = PhishingDetectionSerializer(data=request.data)
         if not serializer.is_valid():
