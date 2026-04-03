@@ -1,4 +1,7 @@
 import re
+import logging
+
+logger = logging.getLogger('aegis.rules')
 
 
 class RuleEngine:
@@ -12,6 +15,7 @@ class RuleEngine:
     }
 
     def analyze(self, data: dict) -> dict:
+        logger.info("[rule_engine.py] Running deterministic rule analysis")
         score = 0.0
         reasons = []
         
@@ -29,11 +33,13 @@ class RuleEngine:
             ):
                 score += 0.4
                 reasons.append("Company name used with free email domain")
+                logger.info(f"[rule_engine.py] Rule 1 fired: sender domain mismatch (+0.4)")
 
         # ─── Rule 2: Excessive URLs ────────────────────────────
         if len(urls) > 3:
             score += 0.25
             reasons.append(f"Excessive URLs in content ({len(urls)} found)")
+            logger.info(f"[rule_engine.py] Rule 2 fired: excessive URLs ({len(urls)}) (+0.25)")
 
         # ─── Rule 3: Mixed urgency + credential request ───────
         urgency_words = ['immediately', 'urgent', 'suspended', 'locked', 
@@ -46,6 +52,7 @@ class RuleEngine:
         if has_urgency and has_creds:
             score += 0.45
             reasons.append("Urgency combined with credential request — strong phishing signal")
+            logger.info("[rule_engine.py] Rule 3 fired: urgency + credentials combo (+0.45)")
         elif has_urgency:
             score += 0.15
         elif has_creds:
@@ -92,7 +99,9 @@ class RuleEngine:
             score += 0.1
             reasons.append("Multiple email addresses embedded in content")
 
+        final_score = round(min(score, 1.0), 2)
+        logger.info(f"[rule_engine.py] Rules complete → score={final_score}, {len(reasons)} reason(s) fired")
         return {
-            'score': round(min(score, 1.0), 2),
+            'score': final_score,
             'reasons': reasons
         }
