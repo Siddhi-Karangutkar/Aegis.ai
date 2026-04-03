@@ -53,9 +53,10 @@ const CircularGauge = ({ value, label, colorScheme = 'risk' }) => {
 
     const getColor = () => {
         if (colorScheme === 'confidence') return '#00f0ff';
-        if (percentage >= 75) return '#ff3333';
-        if (percentage >= 45) return '#FFB300';
-        return '#00ff88';
+        // Risk Thresholds:
+        if (percentage > 50) return '#ff3333'; // Red
+        if (percentage >= 30) return '#FFB300'; // Yellow
+        return '#00ff88'; // Green
     };
 
     const offset = circumference - (animatedValue * circumference);

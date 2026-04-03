@@ -52,10 +52,10 @@ class PhishingEngine:
         )
         logger.info(f"{tag} [engine.py] ← Fused score: {final_score}")
 
-        # Verdict
-        if final_score >= 0.75:
+        # Verdict mapping aligned with 30/50 thresholds
+        if final_score > 0.50:
             verdict = "malicious"
-        elif final_score >= 0.45:
+        elif final_score >= 0.30:
             verdict = "suspicious"
         else:
             verdict = "benign"
