@@ -1,55 +1,53 @@
-import re
-from urllib.parse import urlparse
+import joblib
+import os
+from django.conf import settings
 
 class URLAnalyzer:
+    def __init__(self):
+        self.model = None
+        self.vectorizer = None
+        self._load_models()
+
+    def _load_models(self):
+        """Load pre-trained Character TF-IDF + Random Forest"""
+        try:
+            model_path = os.path.join(settings.BASE_DIR, 'core', 'ml_models', 'url', 'randomforest_model.pkl')
+            vectorizer_path = os.path.join(settings.BASE_DIR, 'core', 'ml_models', 'url', 'char_tfidf_vectorizer.pkl')
+
+            self.vectorizer = joblib.load(vectorizer_path)
+            self.model = joblib.load(model_path)
+            print("✅ URL ML model loaded successfully")
+        except Exception as e:
+            print(f"⚠️ URL ML model failed to load: {e}. Using fallback rules.")
+            self.model = None
+
     def analyze(self, urls: list) -> dict:
         if not urls:
             return {'score': 0.0, 'reasons': []}
+
+        if self.model is None:
+            # Fallback to current heuristic logic
+            from .url_analyzer_fallback import fallback_url_analyze
+            return fallback_url_analyze(urls)
 
         max_score = 0.0
         all_reasons = []
 
         for url in urls:
-            score, reasons = self._analyze_single_url(url)
-            if score > max_score:
-                max_score = score
-            all_reasons.extend(reasons)
+            try:
+                X = self.vectorizer.transform([url])
+                prob = self.model.predict_proba(X)[0]
+                malicious_prob = prob[1]   # assuming class 1 = malicious
+
+                if malicious_prob > max_score:
+                    max_score = malicious_prob
+
+                if malicious_prob > 0.6:
+                    all_reasons.append(f"ML model flagged URL as malicious (confidence: {malicious_prob:.2f})")
+            except:
+                pass
 
         return {
             'score': round(max_score, 2),
-            'reasons': list(set(all_reasons))   # unique reasons
+            'reasons': list(set(all_reasons))
         }
-
-    def _analyze_single_url(self, url: str) -> tuple:
-        score = 0.0
-        reasons = []
-
-        parsed = urlparse(url)
-
-        # 1. Length
-        if len(url) > 80:
-            score += 0.30
-            reasons.append("Unusually long URL")
-
-        # 2. Hyphens & dots
-        if url.count('-') > 3:
-            score += 0.25
-            reasons.append("Multiple hyphens in URL")
-        if url.count('.') > 4:
-            score += 0.20
-            reasons.append("Too many subdomains")
-
-        # 3. IP address
-        if re.match(r'^\d+\.\d+\.\d+\.\d+$', parsed.netloc):
-            score += 0.40
-            reasons.append("Uses raw IP address")
-
-        # 4. Suspicious keywords (capped)
-        suspicious_keywords = ['login', 'verify', 'secure', 'update', 'bank', 'alert', 'otp']
-        keyword_hits = sum(1 for kw in suspicious_keywords if kw in url.lower())
-        keyword_score = min(keyword_hits * 0.15, 0.45)   # hard cap
-        score += keyword_score
-        if keyword_hits > 0:
-            reasons.append(f"Suspicious keyword(s) in URL ({keyword_hits} hits)")
-
-        return min(score, 1.0), reasons

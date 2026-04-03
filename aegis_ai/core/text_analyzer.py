@@ -1,38 +1,69 @@
-import re
+import joblib
+import os
+from django.conf import settings
+from .text_analyzer_fallback import fallback_text_analyze
 
 class TextAnalyzer:
+    def __init__(self):
+        self.model = None
+        self.vectorizer = None
+        self._load_model()
+
+    def _load_model(self):
+        """Load pre-trained email phishing model"""
+        try:
+            model_path = os.path.join(settings.BASE_DIR, 'core', 'ml_models', 'email', 'email_model.pkl')
+            
+            if not os.path.exists(model_path):
+                print(f"⚠️ Model file not found: {model_path}")
+                self.model = None
+                return
+
+            # Load the model (assuming it contains both vectorizer and model)
+            loaded = joblib.load(model_path)
+            
+            # Handle different possible save formats
+            if isinstance(loaded, dict):
+                self.vectorizer = loaded.get('vectorizer')
+                self.model = loaded.get('model')
+            else:
+                # If only model was saved, we'll need vectorizer separately (adjust if needed)
+                self.model = loaded
+                print("⚠️ Vectorizer not found in model file. Using model only.")
+
+            print("✅ Email ML model loaded successfully")
+        except Exception as e:
+            print(f"⚠️ Failed to load email model: {e}")
+            self.model = None
+
     def analyze(self, text: str) -> dict:
         if not text or not text.strip():
             return {'score': 0.0, 'reasons': []}
 
-        text_lower = text.lower()
-        score = 0.0
-        reasons = []
+        if self.model is None:
+            return fallback_text_analyze(text)
 
-        # Category-based scoring (no more unbounded accumulation)
-        # Each category has a hard cap
+        try:
+            # If vectorizer is available, transform text
+            if self.vectorizer is not None:
+                X = self.vectorizer.transform([text])
+                prob = self.model.predict_proba(X)[0]
+            else:
+                # Fallback if only model was saved (less accurate)
+                prob = self.model.predict_proba([[text]])[0]   # This usually won't work
 
-        # 1. Urgency / Pressure
-        urgency_words = ['immediately', 'urgent', 'suspended', 'verify now', 'account locked',
-                         'suspension', 'action required', 'limited time', 'expires soon']
-        if any(word in text_lower for word in urgency_words):
-            score += 0.35
-            reasons.append("Urgency / pressure language detected")
+            phishing_prob = float(prob[1]) if len(prob) > 1 else float(prob[0])
 
-        # 2. Credential / OTP phishing
-        credential_phrases = ['password', 'otp', 'pin', 'login credentials', 'verify your identity',
-                              'confirm your account', 'enter your details']
-        if any(phrase in text_lower for phrase in credential_phrases):
-            score += 0.35
-            reasons.append("Request for credentials / OTP detected")
+            reasons = []
+            if phishing_prob >= 0.75:
+                reasons.append("High-confidence phishing detected by ML model")
+            elif phishing_prob >= 0.5:
+                reasons.append("Potential phishing patterns detected by ML model")
 
-        # 3. Brand impersonation
-        brands = ['bank', 'paypal', 'amazon', 'microsoft', 'google', 'apple', 'facebook']
-        if any(brand in text_lower for brand in brands):
-            score += 0.30
-            reasons.append("Impersonation of trusted brand")
-
-        return {
-            'score': round(min(score, 1.0), 2),
-            'reasons': reasons
-        }
+            return {
+                'score': round(phishing_prob, 2),
+                'reasons': reasons
+            }
+        except Exception as e:
+            print(f"Prediction error: {e}")
+            return fallback_text_analyze(text)
