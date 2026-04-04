@@ -5,6 +5,7 @@ from .url_analyzer import URLAnalyzer
 from .rule_engine import RuleEngine
 from .preprocessor import extract_urls_from_text
 from .fusion import fuse_scores
+from .ai_detector import detect_ai_generated
 
 logger = logging.getLogger('aegis.engine')
 
@@ -62,6 +63,13 @@ class PhishingEngine:
 
         all_reasons = text_result['reasons'] + url_result['reasons'] + rule_result['reasons']
 
+        # ── AI-Generated Detection (runs in parallel, does NOT affect phishing score) ──
+        ai_result = {'available': False}
+        if email_text and len(email_text.strip()) >= 20:
+            logger.info(f"{tag} [engine.py] → Triggering: core/ai_detector.py → detect_ai_generated()")
+            ai_result = detect_ai_generated(email_text)
+            logger.info(f"{tag} [engine.py] ← AI Detection: {ai_result.get('label')} ({ai_result.get('confidence')}%)")
+
         logger.info(f"{tag} [engine.py] Final verdict: {verdict} ({final_score})")
 
         return {
@@ -72,5 +80,6 @@ class PhishingEngine:
                 "text_score": text_result['score'],
                 "url_score": url_result['score'],
                 "rule_score": rule_result['score']
-            }
+            },
+            "ai_detection": ai_result,
         }

@@ -10,10 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load .env file from the aegis_ai root directory
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,6 +31,11 @@ SECRET_KEY = "django-insecure-$og!c1bt@__w4a^)_k0!5rtg5j!$ike_1i(0@bw233(+%=3uwo
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# ─── HuggingFace AI Detection API ───────────────────────────────────
+# Set via environment variable: HUGGINGFACE_API_KEY=hf_xxxxx
+# Or paste your key directly below (not recommended for production)
+HUGGINGFACE_API_KEY = os.environ.get('HUGGINGFACE_API_KEY', '')
 
 
 # Application definition

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PageLayout from '../components/PageLayout';
-import { UploadCloud, Shield, AlertTriangle, CheckCircle, XCircle, Search, FileText, Mail, MessageSquare, Link2, Activity, Zap, Eye, Brain } from 'lucide-react';
+import { UploadCloud, Shield, AlertTriangle, CheckCircle, XCircle, Search, FileText, Mail, MessageSquare, Link2, Activity, Zap, Eye, Brain, Bot, User } from 'lucide-react';
 
 // ─── Groq AI Integration ───────────────────────────────────────────
 const callGroqAI = async (prompt) => {
@@ -198,6 +198,81 @@ const AIExplanationCard = ({ explanation, loading }) => (
         )}
     </div>
 );
+
+// ─── AI-Generated Detection Card ───────────────────────────────────
+const AIDetectionCard = ({ aiDetection }) => {
+    if (!aiDetection || !aiDetection.available) return null;
+
+    const isAI = aiDetection.is_ai_generated;
+    const prob = Math.round(aiDetection.ai_probability * 100);
+    const conf = aiDetection.confidence;
+
+    const accentColor = isAI ? '#a855f7' : '#00ff88';
+    const bgColor = isAI ? 'rgba(168,85,247,0.08)' : 'rgba(0,255,136,0.06)';
+    const borderColor = isAI ? 'rgba(168,85,247,0.25)' : 'rgba(0,255,136,0.2)';
+
+    return (
+        <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1.5rem', border: `1px solid ${borderColor}`, background: bgColor }}>
+            <h3 style={{ color: accentColor, fontSize: '0.85rem', marginBottom: '1.2rem', fontFamily: 'Orbitron, sans-serif', letterSpacing: '2px' }}>
+                <Bot size={16} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+                AI CONTENT DETECTION
+            </h3>
+
+            {/* Verdict Banner */}
+            <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '1rem 1.2rem', borderRadius: '8px', marginBottom: '1rem',
+                background: isAI ? 'rgba(168,85,247,0.1)' : 'rgba(0,255,136,0.08)',
+                border: `1px solid ${isAI ? 'rgba(168,85,247,0.3)' : 'rgba(0,255,136,0.25)'}`,
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                    {isAI ? <Bot size={24} color="#a855f7" /> : <User size={24} color="#00ff88" />}
+                    <div>
+                        <div style={{ fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: '1rem', color: accentColor, letterSpacing: '1px' }}>
+                            {aiDetection.label}
+                        </div>
+                        <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>
+                            {isAI ? 'Content likely produced by an AI model' : 'Content appears to be authored by a human'}
+                        </div>
+                    </div>
+                </div>
+                <div style={{ fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: '1.6rem', color: accentColor }}>
+                    {conf}%
+                </div>
+            </div>
+
+            {/* Confidence Bar */}
+            <div style={{ marginBottom: '0.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem', fontFamily: 'monospace' }}>Analysis Confidence</span>
+                    <span style={{ color: accentColor, fontFamily: 'Orbitron, sans-serif', fontSize: '0.75rem' }}>{conf}%</span>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '6px', height: '8px', overflow: 'hidden' }}>
+                    <div style={{
+                        width: `${conf}%`, height: '100%', borderRadius: '6px',
+                        background: `linear-gradient(90deg, ${accentColor}80, ${accentColor})`,
+                        transition: 'width 1.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                        boxShadow: `0 0 10px ${accentColor}40`,
+                    }} />
+                </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.8rem' }}>
+                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem', fontFamily: 'monospace' }}>AI Likelihood Score</span>
+                <span style={{ color: accentColor, fontFamily: 'Orbitron, sans-serif', fontSize: '0.75rem' }}>{prob}%</span>
+            </div>
+
+            {isAI && (
+                <div style={{ marginTop: '1rem', padding: '0.8rem 1rem', background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.15)', borderRadius: '8px' }}>
+                    <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.78rem', lineHeight: 1.6 }}>
+                        <AlertTriangle size={12} color="#a855f7" style={{ marginRight: '6px', verticalAlign: 'middle' }} />
+                        This content shows patterns consistent with AI text generators (ChatGPT, Gemini, etc.). AI-crafted phishing emails are often more convincing and harder to detect.
+                    </p>
+                </div>
+            )}
+        </div>
+    );
+};
 
 // ─── Recommended Actions ───────────────────────────────────────────
 const RecommendedActions = ({ verdict, aiRecommendation, loading }) => {
@@ -616,6 +691,9 @@ Verdict: ${res.verdict}, Confidence: ${Math.round(res.confidence_score * 100)}%,
 
                             {/* AI Explanation */}
                             <AIExplanationCard explanation={aiExplanation} loading={aiLoading && !aiExplanation} />
+
+                            {/* AI Detection */}
+                            {result.ai_detection && <AIDetectionCard aiDetection={result.ai_detection} />}
 
                             {/* Recommended Actions */}
                             <RecommendedActions verdict={result.verdict} aiRecommendation={aiRecommendation} loading={aiLoading && !aiRecommendation} />
