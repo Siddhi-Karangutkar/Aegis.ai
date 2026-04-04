@@ -9,6 +9,8 @@ import re
 import math
 from collections import Counter
 
+from core.docker_sandbox import run_sandbox as docker_run_sandbox
+
 logger = logging.getLogger('aegis.sandbox')
 
 # ─── Magic Byte Signatures ──────────────────────────────────────────
@@ -278,7 +280,7 @@ def analyze_remote_file(url: str) -> dict:
 
         logger.info(f"[sandbox_engine.py] Downloaded {len(content)} bytes, filename: {filename}")
 
-        # Run structural analysis
+        # Run structural analysis (in-process, fast)
         result = analyze_file_content(content, filename)
 
         # Also run filename analysis
@@ -286,6 +288,33 @@ def analyze_remote_file(url: str) -> dict:
         result['score'] = round(min(max(result['score'], fname_result['score']), 1.0), 2)
         result['reasons'] = list(set(result['reasons'] + fname_result['reasons']))[:8]
         result['analysis']['filename'] = filename
+
+        # ── Docker Sandbox (deep analysis in isolated container) ──
+        try:
+            import tempfile
+            import os
+
+            suffix = '.' + filename.rsplit('.', 1)[-1] if '.' in filename else ''
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+                tmp.write(content)
+                tmp_path = tmp.name
+
+            try:
+                docker_result = docker_run_sandbox(tmp_path, filename)
+                # Merge: take the higher score
+                if docker_result.get('score', 0) > result['score']:
+                    result['score'] = docker_result['score']
+                result['reasons'] = list(dict.fromkeys(
+                    result['reasons'] + docker_result.get('reasons', [])
+                ))[:10]
+                result['docker_analysis'] = docker_result.get('analysis', {})
+                logger.info(f"[sandbox_engine.py] Docker sandbox score: {docker_result.get('score', 0)}")
+            finally:
+                if os.path.exists(tmp_path):
+                    os.unlink(tmp_path)
+
+        except Exception as e:
+            logger.warning(f"[sandbox_engine.py] Docker sandbox skipped: {e}")
 
         return result
 

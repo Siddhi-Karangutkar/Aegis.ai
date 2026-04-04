@@ -15,6 +15,7 @@ from django.utils.decorators import method_decorator
 from core.engine import PhishingEngine
 from .serializers import PhishingDetectionSerializer
 from core.preprocessor import extract_pdf_text, extract_urls_from_text
+from core.docker_sandbox import run_sandbox
 
 logger = logging.getLogger('aegis.api')
 
@@ -79,26 +80,46 @@ class PhishingDetectView(APIView):
         temp_files = []
         extracted_text_from_pdfs = ""
         all_urls = list(urls)
+        sandbox_results = []  # Docker sandbox results for each attachment
 
         try:
-            # Process attachments (PDF support)
+            # Process attachments (PDF support + Docker sandbox)
             for i, uploaded_file in enumerate(attachments):
                 logger.info(f"[REQ-{request_id}] Processing attachment {i+1}: {uploaded_file.name} ({uploaded_file.size} bytes)")
 
-                with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
+                # Determine file suffix from original filename
+                orig_name = uploaded_file.name or 'unknown'
+                suffix = '.' + orig_name.rsplit('.', 1)[-1] if '.' in orig_name else ''
+
+                with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
                     tmp.write(uploaded_file.read())
                     temp_path = tmp.name
                     temp_files.append(temp_path)
 
+                # ── Docker Sandbox Analysis ──
                 try:
-                    pdf_text = extract_pdf_text(temp_path)
-                    extracted_text_from_pdfs += "\n" + pdf_text
-                    extracted_urls = extract_urls_from_text(pdf_text)
-                    all_urls.extend(extracted_urls)
-                    logger.info(f"[REQ-{request_id}]   PDF extracted: {len(pdf_text)} chars, {len(extracted_urls)} URLs found")
+                    logger.info(f"[REQ-{request_id}]   Running Docker sandbox on: {orig_name}")
+                    sb_result = run_sandbox(temp_path, orig_name)
+                    sandbox_results.append(sb_result)
+                    logger.info(
+                        f"[REQ-{request_id}]   Sandbox result: score={sb_result.get('score', 0)}, "
+                        f"reasons={sb_result.get('reasons', [])}"
+                    )
                 except Exception as e:
-                    logger.error(f"[REQ-{request_id}]   PDF extraction error: {e}")
-                    extracted_text_from_pdfs += f"\n[PDF read error: {str(e)}]"
+                    logger.error(f"[REQ-{request_id}]   Docker sandbox error: {e}")
+                    sandbox_results.append({'score': 0.0, 'reasons': [f'Sandbox error: {str(e)}']})
+
+                # ── PDF Text Extraction (existing logic) ──
+                if suffix.lower() == '.pdf':
+                    try:
+                        pdf_text = extract_pdf_text(temp_path)
+                        extracted_text_from_pdfs += "\n" + pdf_text
+                        extracted_urls = extract_urls_from_text(pdf_text)
+                        all_urls.extend(extracted_urls)
+                        logger.info(f"[REQ-{request_id}]   PDF extracted: {len(pdf_text)} chars, {len(extracted_urls)} URLs found")
+                    except Exception as e:
+                        logger.error(f"[REQ-{request_id}]   PDF extraction error: {e}")
+                        extracted_text_from_pdfs += f"\n[PDF read error: {str(e)}]"
 
             # Combine all text
             full_text = (email_text + "\n" + extracted_text_from_pdfs).strip()
@@ -116,6 +137,29 @@ class PhishingDetectView(APIView):
             # Run the detection engine
             engine = PhishingEngine()
             result = engine.detect(input_data, request_id=request_id)
+
+            # ── Merge Docker sandbox results into final verdict ──
+            if sandbox_results:
+                max_sandbox_score = max(r.get('score', 0) for r in sandbox_results)
+                all_sandbox_reasons = []
+                for r in sandbox_results:
+                    all_sandbox_reasons.extend(r.get('reasons', []))
+
+                # If sandbox found something worse than the engine, escalate
+                if max_sandbox_score > result.get('confidence_score', 0):
+                    result['confidence_score'] = round(max(result.get('confidence_score', 0), max_sandbox_score), 2)
+                    if max_sandbox_score > 0.5:
+                        result['verdict'] = 'PHISHING'
+                    elif max_sandbox_score > 0.3:
+                        result['verdict'] = 'SUSPICIOUS'
+
+                result['reasons'] = list(dict.fromkeys(
+                    result.get('reasons', []) + all_sandbox_reasons
+                ))[:10]
+                result['sandbox_analysis'] = [
+                    r.get('analysis', {}) for r in sandbox_results
+                ]
+                logger.info(f"[REQ-{request_id}] Sandbox scores merged: max={max_sandbox_score}")
 
             logger.info(f"[REQ-{request_id}] ── Detection Complete ──")
             logger.info(f"[REQ-{request_id}] Verdict: {result['verdict']} | Score: {result['confidence_score']}")

