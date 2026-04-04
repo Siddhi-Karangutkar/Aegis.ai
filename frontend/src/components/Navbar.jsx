@@ -22,6 +22,7 @@ const Navbar = () => {
         { path: '/bestpractices', label: 'Security Best Practices' },
         { path: '/blog', label: 'Threat Intelligence Blog' },
         { path: '/technology', label: 'About the Technology' },
+        { path: '/install', label: '🛡️ Install Extension' },
     ];
 
     return (
@@ -37,6 +38,7 @@ const Navbar = () => {
                 <div style={styles.navLinks}>
                     <Link to="/technology" style={styles.link}>Technology</Link>
                     <Link to="/report" style={styles.link}>Report Threat</Link>
+                    <Link to="/install" style={{...styles.link, color: '#00ff9d', fontWeight: 700}}>🛡️ Get Extension</Link>
                 </div>
             </nav>
 

@@ -12,6 +12,7 @@ import ThreatBlog from './pages/ThreatBlog';
 import BlogPost from './pages/BlogPost';
 import Technology from './pages/Technology';
 import ReportPhishing from './pages/ReportPhishing';
+import InstallExtension from './pages/InstallExtension';
 import BackgroundParticles from './components/BackgroundParticles';
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/technology" element={<Technology />} />
           <Route path="/report" element={<ReportPhishing />} />
+          <Route path="/install" element={<InstallExtension />} />
         </Routes>
       </div>
     </BrowserRouter>

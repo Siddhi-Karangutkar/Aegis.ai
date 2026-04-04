@@ -30,7 +30,15 @@ SECRET_KEY = "django-insecure-$og!c1bt@__w4a^)_k0!5rtg5j!$ike_1i(0@bw233(+%=3uwo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+# Trust ngrok tunnels for CSRF
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok-free.app',
+    'https://*.ngrok.io',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
 
 # ─── HuggingFace AI Detection API ───────────────────────────────────
 # Set via environment variable: HUGGINGFACE_API_KEY=hf_xxxxx
@@ -146,6 +154,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # React build output lives here
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
